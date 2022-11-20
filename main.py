@@ -1,5 +1,4 @@
 from datetime import date
-
 from entities.book import Book
 from entities.customer import Customer
 from entities.order import Order
