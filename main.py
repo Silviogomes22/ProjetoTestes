@@ -5,74 +5,43 @@ from entities.customer import Customer
 from entities.order import Order
 from repositories.customer_repository import CustomerRepository
 from repositories.order_repository import OrderRepository
+from entities.UserInterface import UserInterface
+from repositories.book_repositories import BookRepositories
+from csv_extract import CsvExtract
 
-file_book = list(open("books.csv", "r", encoding="utf-8"))
-
-list_books: list[Book] = []
-
-
-def format_str_price_to_float(price: str) -> float:
-    try:
-        return float(price.replace("R$ ", "").replace(",", "."))
-    except:
-        return 0
-
-
-def verif_if_customer_exists(customer_id: int, customer_repository: CustomerRepository) -> bool:
-    for customer in customer_repository.list_customers:
-        if (customer.id == customer_id):
-            return True
-
-    return False
-
-
-def get_customer(customer_id: int, customer_repository: CustomerRepository) -> Customer:
-    for customer in customer_repository.list_customers:
-        if (customer.id == customer_id):
-            return customer
-
-    return Customer(-1, "Client not found!")
-
-
-
-for book in file_book[1:]:
-    list_book = book.split(";")
-    book = Book(int(list_book[0]), list_book[1], list_book[2], list_book[3],
-                list_book[4], format_str_price_to_float(list_book[5]))
-    list_books.append(book)
 
 customer_repository = CustomerRepository()
 order_repository = OrderRepository()
+csv_extract = CsvExtract()
+book_repository = BookRepositories(csv_extract)
+book_repository.set_books()
+user_interface = UserInterface(customer_repository)
 
 while True:
-    menu_option = principal_menu()
+    menu_option = user_interface.get_interactions()
     if (menu_option == 0):
         break
 
     print("\n")
 
     if menu_option == 1:
-        id = int(input("Informe o código do cliente: "))
-        nome = input("Informe o nome do cliente: ")
-        customer = Customer(id, nome)
-        customer_repository.list_customers.append(customer)
-        print("Client cadastrado com sucesso!")
+        print(user_interface.cadastrar_usuario())
     if menu_option == 2:
         id = int(input("Informe o código do pedido: "))
         customer_id = int(input("Informe o código do cliente: "))
         today = date.today()
-        if (not verif_if_customer_exists(customer_id, customer_repository)):
+        if (not customer_repository.verif_if_customer_exists(customer_id, customer_repository)):
             print("Cliente não existe!")
             continue
 
-        customer = get_customer(customer_id, customer_repository)
+        customer = customer_repository.get_customer(customer_id, customer_repository)
         book_id = int(input("Informe o código do livro: "))
 
-        if (not verif_if_book_exists(book_id)):
+        if (not book_repository.verif_if_book_exists(book_id)):
             print("Livro não existe!")
             continue
 
-        book = get_book(book_id)
+        book = book_repository.get_book(book_id)
         order = Order(id, customer, today)
         order.purchased_book = book
 
@@ -99,7 +68,7 @@ while True:
         menu += formatText.format("Id", "Ttítulo", "ISBN",
                                   "Autor", "Assunto", "Valor", "Estoque")
 
-        for book in list_books:
+        for book in book_repository.list_books:
             menu += formatText.format(book.id, book.name, book.isbn,
                                       book.author, book.category, book.price, book.stock)
         print(menu)
