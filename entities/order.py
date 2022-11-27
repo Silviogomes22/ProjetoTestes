@@ -11,3 +11,9 @@ class Order:
         self.date_order = date_order
         self.purchased_book: Book
         self.total_price: float = 0
+
+    def adicionar_livro(self, livro: Book) -> bool:
+        if (livro.get_stock() == 0 or livro.verif_preco_invalido()):
+            return False
+        self.purchased_book = livro
+        return True

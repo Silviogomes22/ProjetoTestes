@@ -7,3 +7,13 @@ class Book:
         self.category = category
         self.price = price
         self.stock: int = 1
+
+    def verif_preco_invalido(self):
+        return self.price == 0
+
+    def baixar_estoque(self):
+        if(self.stock > 0):
+            self.stock -= 1
+
+    def get_stock(self):
+        return self.stock
