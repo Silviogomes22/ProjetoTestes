@@ -27,14 +27,19 @@ while True:
     if menu_option == 1:
         print(user_interface.cadastrar_usuario())
     if menu_option == 2:
-        id = int(input("Informe o código do pedido: "))
+        order_id = int(input("Informe o código do pedido: "))
+        if (order_repository.verif_oder_exist(order_id)):
+            print("Pedido existente")
+            continue
+
+
         customer_id = int(input("Informe o código do cliente: "))
         today = date.today()
-        if (not customer_repository.verif_if_customer_exists(customer_id, customer_repository)):
+        if (not customer_repository.verif_if_customer_exists(customer_id)):
             print("Cliente não existe!")
             continue
 
-        customer = customer_repository.get_customer(customer_id, customer_repository)
+        customer = customer_repository.get_customer(customer_id)
         book_id = int(input("Informe o código do livro: "))
 
         if (not book_repository.verif_if_book_exists(book_id)):
@@ -42,7 +47,7 @@ while True:
             continue
 
         book = book_repository.get_book(book_id)
-        order = Order(id, customer, today)
+        order = Order(order_id, customer, today)
         order.purchased_book = book
 
         order_repository.list_orders.append(order)

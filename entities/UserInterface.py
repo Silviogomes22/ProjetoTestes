@@ -26,4 +26,4 @@ class UserInterface:
         if (self.customer_repository.create_customer(id, nome)):
             return "Client cadastrado com sucesso!"
         else:
-            return "Cliente já"
+            return "Cliente já cadastrado"
