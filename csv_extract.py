@@ -5,7 +5,7 @@ class CsvExtract:
     def extract(self) -> list:
         return list(open("books.csv", "r", encoding="utf-8"))
         
-    def format_str_price_to_float(price: str) -> float:
+    def format_str_price_to_float(self, price: str) -> float:
         try:
             return float(price.replace("R$ ", "").replace(",", "."))
         except:

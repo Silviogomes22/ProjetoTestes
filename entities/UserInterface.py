@@ -1,8 +1,8 @@
 from repositories.book_repositories import BookRepositories
 
 class UserInterface:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, customer_repository) -> None:
+        self.customer_repository = customer_repository
 
     def principal_menu(self) -> int:
         print("1 - Cadastrar cliente")
@@ -19,3 +19,11 @@ class UserInterface:
         except:
             print("A opção informada é inválida, o programa vai ser encerrado...")
             return 0
+
+    def cadastrar_usuario(self):
+        id = int(input("Informe o código do cliente: "))
+        nome = input("Informe o nome do cliente: ")
+        if (self.customer_repository.create_customer(id, nome)):
+            return "Client cadastrado com sucesso!"
+        else:
+            return "Cliente já cadastrado"
