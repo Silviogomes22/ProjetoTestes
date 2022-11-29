@@ -50,7 +50,6 @@ class UserInterface:
 
         order = Order(order_id, customer, today)
         if (order.adicionar_livro(book)):
-            book.baixar_estoque()
             self.order_repository.list_orders.append(order)
             return "Pedido cadastrado com sucesso!"
         else:
@@ -76,9 +75,9 @@ Livro Escolhido: {order.purchased_book.name}
         return menu
 
     def relatorio_de_livros(self):
-        formatText = "{0:<10} {1:<20} {1:<20} {1:<20} {1:<20} {1:<20}\n"
+        formatText = "{0:<10} {1:<20} {2:<20} {3:<20} {4:<20} {5:<20}\n"
         menu = ("\n***** Relatório de livros cadastrados *****\n")
-        menu += formatText.format("Id", "Ttítulo", "ISBN",
+        menu += formatText.format("Id", "Título", "ISBN",
                                   "Autor", "Assunto", "Valor", "Estoque")
 
         for book in self.book_repository.list_books:
