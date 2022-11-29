@@ -16,4 +16,5 @@ class Order:
         if (livro.get_stock() == 0 or livro.verif_preco_invalido()):
             return False
         self.purchased_book = livro
+        livro.baixar_estoque()
         return True
