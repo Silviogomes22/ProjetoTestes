@@ -53,3 +53,61 @@ def test_cod_cliente():
     # Assert
     assert segundo == False
 
+def test_cod_pedido():
+    # Assert
+    csv_extract = CsvExtract()
+    book_repository = BookRepositories(csv_extract)
+    book_repository.set_books()
+    order_one = 1
+    order_two = 1
+    order_repository = OrderRepository()
+    customer = Customer(1, "Alberto")
+    today = date.today()
+    book_one = book_repository.get_book(5)
+    book_two = book_repository.get_book(7)
+
+    # Act
+    primeiro = order_repository.create_order(order_one, customer, today, book_one)
+    segundo = order_repository.create_order(order_two, customer, today, book_two)
+
+    # Assert
+    assert primeiro == "Pedido cadastrado com sucesso"
+    assert segundo == "Pedido já existe"
+
+def test_livro_zerado():
+    # Assert
+    csv_extract = CsvExtract()
+    book_repository = BookRepositories(csv_extract)
+    book_repository.set_books()
+    customer = Customer(1, "Alberto")
+    today = date.today()
+    order_repository = OrderRepository()
+    book_one = book_repository.get_book(1)
+    book_two = book_repository.get_book(2)
+
+    # Act
+    primeiro = order_repository.create_order(1, customer, today, book_one)
+    segundo = order_repository.create_order(2, customer, today, book_two)
+
+    # Assert
+    assert segundo == "Pedido cadastrado com sucesso"
+    assert primeiro == "Livro com preço inválido"
+
+def test_compra_dupla():
+    # Assert
+    csv_extract = CsvExtract()
+    book_repository = BookRepositories(csv_extract)
+    book_repository.set_books()
+    customer = Customer(1, "Alberto")
+    customer_two = Customer(2, "Bruno")
+    today = date.today()
+    order_repository = OrderRepository()
+    book_one = book_repository.get_book(2)
+
+    # Act
+    primeiro = order_repository.create_order(1, customer, today, book_one)
+    segundo = order_repository.create_order(2, customer_two, today, book_one)
+
+    # Assert
+    assert primeiro == "Pedido cadastrado com sucesso"
+    assert segundo == "Livro sem estoque"

@@ -46,15 +46,7 @@ class UserInterface:
 
         book = self.book_repository.get_book(book_id)
 
-        if (not self.order_repository.create_order(order_id, customer, today)):
-            return "Pedido existente"
-
-        order = self.order_repository.get_order(order_id)
-        if (order.adicionar_livro(book)):
-            self.order_repository.list_orders.append(order)
-            return "Pedido cadastrado com sucesso!"
-        else:
-            return "Livro indisponível"
+        return self.order_repository.create_order(order_id, customer, today, book)
 
     def relatorio_de_pedidos(self):
         buffer = "***** Relatório de pedidos *****"
