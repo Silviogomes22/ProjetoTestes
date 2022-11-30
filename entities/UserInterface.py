@@ -31,8 +31,6 @@ class UserInterface:
 
     def fazer_pedido(self):
         order_id = int(input("Informe o código do pedido: "))
-        if (self.order_repository.verif_oder_exist(order_id)):
-            return "Pedido existente"
             
         customer_id = int(input("Informe o código do cliente: "))
         today = date.today()
@@ -48,7 +46,10 @@ class UserInterface:
 
         book = self.book_repository.get_book(book_id)
 
-        order = Order(order_id, customer, today)
+        if (not self.order_repository.create_order(order_id, customer, today)):
+            return "Pedido existente"
+
+        order = self.order_repository.get_order(order_id)
         if (order.adicionar_livro(book)):
             self.order_repository.list_orders.append(order)
             return "Pedido cadastrado com sucesso!"
