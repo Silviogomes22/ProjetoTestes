@@ -40,6 +40,16 @@ def test_stock():
     # Assert
     assert book.stock == 0
 
-self.order_repository.verif_oder_exist(order_id)
-not self.customer_repository.verif_if_customer_exists(customer_id)
-not self.book_repository.verif_if_book_exists(book_id)
+def test_cod_cliente():
+    # Assert
+    customer_one = 1
+    customer_two = 1
+    customer_repository = CustomerRepository()
+    
+    # Act
+    primeiro = customer_repository.create_customer(customer_one, "Alberto")
+    segundo = customer_repository.create_customer(customer_two, "Bruno")
+
+    # Assert
+    assert segundo == False
+
