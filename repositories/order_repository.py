@@ -1,5 +1,6 @@
 from entities.order import Order
-
+from entities.customer import Customer
+from datetime import date
 
 class OrderRepository:
     def __init__(self) -> None:
@@ -11,3 +12,14 @@ class OrderRepository:
                 return True
         return False
 
+    def create_order(self, id: int, customer: Customer, date_order: date):
+        if(self.verif_oder_exist(id)):
+           return False
+        order = Order(id, customer, date_order)
+        self.list_orders.append(order)
+        return True 
+    
+    def get_order(self, id):
+        for order in self.list_orders:
+            if (order.id == id):
+                return order
