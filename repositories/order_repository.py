@@ -14,14 +14,13 @@ class OrderRepository:
         return False
 
     def create_order(self, id: int, customer: Customer, date_order: date, livro: Book):
-        if(self.verif_oder_exist(id)):
-           return "Pedido já existe"
+        if (self.verif_oder_exist(id)):
+            return False
         order = Order(id, customer, date_order)
-        status = order.adicionar_livro(livro)
-        if (status == "Livro adicionado"):
-            self.list_orders.append(order)
-            return "Pedido cadastrado com sucesso"
-        return status
+        order.adicionar_livro(livro)
+        self.list_orders.append(order)
+        return True
+        
     
     def get_order(self, id):
         for order in self.list_orders:

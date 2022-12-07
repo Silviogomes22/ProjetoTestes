@@ -31,22 +31,41 @@ class UserInterface:
 
     def fazer_pedido(self):
         order_id = int(input("Informe o código do pedido: "))
-            
-        customer_id = int(input("Informe o código do cliente: "))
+
+        try:   
+            customer_id = int(input("Informe o código do cliente: "))
+        except ValueError:
+            return "Pedido não pode ser feito sem cliente"
         today = date.today()
 
         if (not self.customer_repository.verif_if_customer_exists(customer_id)):
             return "Cliente não existe!"
 
         customer = self.customer_repository.get_customer(customer_id)
-        book_id = int(input("Informe o código do livro: "))
-
+        
+        try:
+            book_id = int(input("Informe o código do livro: "))
+        except ValueError:
+            return "Pedido não pode ser feito sem livro"
+        
         if (not self.book_repository.verif_if_book_exists(book_id)):
             return "Livro não existe!"
-
+        
         book = self.book_repository.get_book(book_id)
+        
+        if(self.order_repository.verif_oder_exist(id)):
+           return "Pedido já existe"
 
-        return self.order_repository.create_order(order_id, customer, today, book)
+        if (book.get_stock() == 0):
+            return "Livro sem estoque"
+
+        if (book.verif_preco_invalido()):
+            return "Livro com preço inválido"
+
+        if(self.order_repository.create_order(order_id, customer, today, book)):
+            return "Pedido cadastrado com sucesso"
+        
+        return "Ocorreu um erro no cadastro do pedido."
 
     def relatorio_de_pedidos(self):
         buffer = "***** Relatório de pedidos *****"
